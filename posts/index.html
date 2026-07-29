@@ -1,16 +1,207 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>所有文章</title>
-    <link rel="stylesheet" href="index.css">
+    <title>所有文章 - 碎碎念</title>
+    <style>
+        /* ===== 全局重置 & 背景 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #533483 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* ===== 卡片容器 ===== */
+        .container {
+            max-width: 700px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 20px;
+        }
+
+        /* ===== 通用卡片样式 ===== */
+        .card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 24px;
+            padding: 24px 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            color: #ffffff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        /* ===== 标题与导航 ===== */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+        .top-bar h4 {
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+        .top-bar a {
+            color: #a78bfa;
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 6px 14px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.08);
+            transition: background 0.2s;
+        }
+        .top-bar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ===== 主标题 ===== */
+        .main-title {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .post-count {
+            font-size: 0.95rem;
+            opacity: 0.6;
+            font-weight: 300;
+        }
+
+        /* ===== 文章列表 ===== */
+        .post-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .post-item:last-child {
+            border-bottom: none;
+        }
+        .post-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            margin: 0 -10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 8px;
+        }
+        .post-title {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.92);
+        }
+        .post-date {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.35);
+            flex-shrink: 0;
+            margin-left: 15px;
+        }
+
+        /* ===== 返回链接（卡片样式） ===== */
+        .back-link {
+            display: block;
+            text-align: center;
+            color: #a78bfa;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 12px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.06);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 480px) {
+            .card { padding: 18px 20px; }
+            .top-bar { flex-wrap: wrap; }
+            .main-title { font-size: 1.6rem; }
+            .post-title { font-size: 0.95rem; }
+            .post-date { font-size: 0.75rem; margin-left: 10px; }
+        }
+    </style>
 </head>
 <body>
-<h4>你好，世界。</h4>
-<a href="../index.html">Home</a>
-<h1>所有文章</h1>
-<div>总计。。字</div>
+<div class="container">
+    <!-- 顶部导航卡片 -->
+    <div class="card top-bar">
+        <h4>📖 你好，世界。</h4>
+        <a href="../index.html">🏠 首页</a>
+    </div>
 
+    <!-- 标题卡片 -->
+    <div class="card" style="padding-bottom: 16px;">
+        <div class="main-title">📚 所有文章</div>
+        <div class="post-count">总计 <span id="total-count">0</span> 篇</div>
+    </div>
 
+    <!-- 文章列表卡片 -->
+    <div class="card" style="padding: 6px 20px 10px 20px;" id="post-list">
+        <!-- 这里会被 JavaScript 动态填充 -->
+        <div style="text-align: center; color: rgba(255,255,255,0.3); padding: 20px 0;">加载中...</div>
+    </div>
+
+    <!-- 返回首页（卡片按钮） -->
+    <a href="../index.html" class="back-link">← 返回首页</a>
+</div>
+
+<script>
+    // ===== 加载 posts/index.json 并渲染列表 =====
+    (async function() {
+        try {
+            const res = await fetch('./index.json'); // 与当前页面同级
+            if (!res.ok) throw new Error('列表加载失败');
+            const posts = await res.json();
+
+            const listContainer = document.getElementById('post-list');
+            const countSpan = document.getElementById('total-count');
+
+            countSpan.textContent = posts.length;
+
+            if (posts.length === 0) {
+                listContainer.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.3);padding:20px 0;">还没有文章 📝</div>';
+                return;
+            }
+
+            listContainer.innerHTML = posts.map(post => {
+                const filePath = `postfiles/${post.filename}`;
+                return `
+                <div class="post-item" onclick="window.location.href='../post.html?url=${encodeURIComponent(filePath)}'">
+                    <span class="post-title">${post.title}</span>
+                    <span class="post-date">${post.date}</span>
+                </div>
+            `;
+            }).join('');
+        } catch (err) {
+            document.getElementById('post-list').innerHTML =
+                `<div style="text-align:center;color:rgba(255,255,255,0.3);padding:20px 0;">⚠️ ${err.message}</div>`;
+            console.error('加载失败：', err);
+        }
+    })();
+</script>
 </body>
 </html>
