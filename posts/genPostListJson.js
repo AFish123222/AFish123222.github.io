@@ -15,10 +15,10 @@ async function genPostList() {
 
         // === 以下逻辑完全照搬你 gen 脚本里的 ===
         const posts = files
-            .filter(f => f.name.endsWith('.md'))
+            .filter(f => f.name.endsWith('.html'))
             .sort((a, b) => b.name.localeCompare(a.name))
             .map(f => {
-                const name = f.name.replace(/\.md$/, '');
+                const name = f.name.replace(/\.html$/, '');
                 const parts = name.split('-');
                 let date = '未知日期', title = name;
                 if (parts.length >= 4) {
