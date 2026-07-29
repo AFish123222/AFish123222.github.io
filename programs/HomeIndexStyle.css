@@ -62,11 +62,17 @@ body {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     text-align: center;
     color: #ffffff;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /*transition: transform 0.2s ease, box-shadow 0.2s ease;*/
+    transition: all 0.3s ease;
 }
 .card:hover {
+    background: rgba(255, 255, 255, 0.28);
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 12px 28px rgba(83, 52, 131, 0.5);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+.card:active {
+    transform: scale(0.97);
 }
 
 /* ===== 描述卡片 ===== */
