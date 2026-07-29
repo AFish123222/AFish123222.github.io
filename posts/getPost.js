@@ -15,7 +15,7 @@
             // 注意：这里用 post.filename，而不是 name
             const filePath = `posts/postfiles/${post.filename}`;
             return `
-            <div ... onclick="window.location.href='post.html?url=${encodeURIComponent(filePath)}'">
+            <div ... onclick="window.location.href='posts/post.html?url=${encodeURIComponent(filePath)}'">
                 <span>${post.title}</span>
                 <span>${post.date}</span>
             </div>
