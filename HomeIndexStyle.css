@@ -135,6 +135,8 @@ body {
     display: block;         /* 防止底部留白 */
     border: 3px solid rgba(255,255,255,0.3); /* 可选边框 */
     transition: transform 0.3s ease, border-color 0.3s ease;
+    image-rendering: auto;  /* 让浏览器用最佳缩放算法 */
+    image-rendering: -webkit-optimize-contrast;
 }
 
 /* 悬停时头像放大，增强交互 */
