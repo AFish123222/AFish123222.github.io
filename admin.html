@@ -23,7 +23,15 @@
     // 替换成你的用户名和仓库名
     const OWNER = 'AFish123222';
     const REPO = 'AFish123222.github.io';
-    const path = `posts/postfiles/${new Date().toISOString().slice(0,10)}-${title.replace(/\s/g,'-')}.html`;
+
+    const now = new Date();
+    const dateStr =
+            now.getFullYear() + '-' +
+            String(now.getMonth() + 1).padStart(2, '0') + '-' +
+            String(now.getDate()).padStart(2, '0') + '-' +
+            String(now.getHours()).padStart(2, '0') + '-' +
+            String(now.getMinutes()).padStart(2, '0');
+    const path = `posts/postfiles/${dateStr}-${title.replace(/\s/g,'-')}.html`;
 
     const html = `${content}`;
 
