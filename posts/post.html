@@ -17,8 +17,13 @@
 <script>
   (async function() {
     const params = new URLSearchParams(window.location.search);
-    const rawUrl = params.get('url');
-    if (!rawUrl) return document.getElementById('loading').textContent = '❌ 没有文章';
+    const rawUrl = params.get('url');   // 直接从 params 取，不用重复声明
+
+    if (!rawUrl) {
+      document.getElementById('loading').textContent = '❌ 没有指定文章';
+      return;
+    }
+
     try {
       const res = await fetch(rawUrl);
       if (!res.ok) throw new Error('加载失败');
