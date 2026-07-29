@@ -123,27 +123,33 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: fit-content;           /* 宽度自适应内容 */
-    padding: 8px;                 /* 内边距 = 圆框的“略大”部分 */
-    border-radius: 50%;           /* 圆形 */
-    border: 3px solid rgba(255, 255, 255, 0.5); /* 圆框颜色和粗细 */
-    background: rgba(255, 255, 255, 0.1); /* 可选：半透明背景填充圆框 */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* 可选：外发光 */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    /* 继承 .card-link 的毛玻璃效果会被覆盖，这里重新定义 */
+    width: fit-content;
+    padding: 0;                    /* 去掉内边距，让头像贴边 */
+    border: none;                  /* 去掉任何边框 */
+    border-radius: 50%;
+    background: transparent;       /* 背景完全透明，不遮挡毛玻璃 */
+    box-shadow:
+            0 0 30px 10px rgba(255, 255, 255, 0.15),   /* 外层大范围柔光 */
+            0 0 60px 20px rgba(255, 255, 255, 0.08),   /* 更外层扩散光晕 */
+            0 0 100px 40px rgba(255, 255, 255, 0.05);  /* 极外层微弱辉光 */
+    transition: box-shadow 0.4s ease, transform 0.3s ease;
 }
 
 #avatar:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(83, 52, 131, 0.4);
+    transform: scale(1.03);
+    box-shadow:
+            0 0 40px 15px rgba(255, 255, 255, 0.25),
+            0 0 80px 30px rgba(255, 255, 255, 0.12),
+            0 0 120px 50px rgba(255, 255, 255, 0.06);
 }
 
 #avatar img {
-    width: 120px;                 /* 头像图片大小 */
+    width: 120px;
     height: 120px;
-    border-radius: 50%;           /* 图片本身也是圆的 */
-    object-fit: cover;            /* 图片填充不变形 */
-    display: block;               /* 去除底部多余间隙 */
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    /* 图片本身不加额外效果，让它干净清晰 */
 }
 
 /* ===== 响应式（手机） ===== */
