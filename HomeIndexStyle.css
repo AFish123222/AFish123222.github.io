@@ -192,8 +192,7 @@ body {
 
 /* 悬停时颜色变亮 + 微微上浮 */
 #name:hover {
-    transform: scale(1.2);
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.07);
 }
 
 /* ===== 响应式（手机） ===== */
