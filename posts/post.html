@@ -16,10 +16,18 @@
   <a href="index.html" class="card-link">← 返回首页</a>
 </div>
 <script>
+///////
+const params = new URLSearchParams(window.location.search);
+const rawUrl = params.get('url');   // 直接从 params 取，不用重复声明
+
+console.log("url"+rawUrl);
+/////
+
   (async function() {
     const params = new URLSearchParams(window.location.search);
     const rawUrl = params.get('url');   // 直接从 params 取，不用重复声明
 
+    console.log("url"+rawUrl);
     if (!rawUrl) {
       document.getElementById('loading').textContent = '❌ 没有指定文章';
       return;
