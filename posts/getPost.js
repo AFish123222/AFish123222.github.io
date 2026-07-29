@@ -4,43 +4,24 @@
     const POSTS_DIR = 'posts';
 
     async function fetchPosts() {
-    const url = `./posts/index.json`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('无法获取列表');
-    const files = await res.json();
-    return files
-    .filter(f => f.name.endsWith('.md'))
-    .sort((a, b) => b.name.localeCompare(a.name));
-}
+        const res = await fetch('./posts/index.json');
+        return await res.json();   // 直接返回数组，不再过滤
+    }
 
     function renderPosts(posts) {
-    const container = document.getElementById('posts-container');
-    if (posts.length === 0) {
-    container.innerHTML = '<p style="color: rgba(255,255,255,0.4);">还没有帖子 📝</p>';
-    return;
-}
-    container.innerHTML = posts.map(post => {
-    const name = post.name.replace(/\.md$/, '');
-    const parts = name.split('-');
-    let date = '未知日期', title = name;
-    if (parts.length >= 4) {
-    date = `${parts[0]}-${parts[1]}-${parts[2]}`;
-    title = parts.slice(3).join('-');
-}
-    return `
-                <div class="post-item" style="
-                    padding: 10px 0;
-                    border-bottom: 1px solid rgba(255,255,255,0.06);
-                    display: flex;
-                    justify-content: space-between;
-                    cursor: pointer;
-                " onclick="window.location.href='posts/post.html?url=${encodeURIComponent(post.download_url)}'">
-                    <span style="color: rgba(255,255,255,0.9);">${title}</span>
-                    <span style="color: rgba(255,255,255,0.3); font-size: 0.8rem;">${date}</span>
-                </div>
-            `;
-}).join('');
-}
+        const container = document.getElementById('posts-container');
+        // ...
+        container.innerHTML = posts.map(post => {
+            // 注意：这里用 post.filename，而不是 name
+            const filePath = `posts/postfiles/${post.filename}`;
+            return `
+            <div ... onclick="window.location.href='post.html?url=${encodeURIComponent(filePath)}'">
+                <span>${post.title}</span>
+                <span>${post.date}</span>
+            </div>
+        `;
+        }).join('');
+    }
 
     (async function init() {
     try {
