@@ -175,7 +175,7 @@ body {
     object-fit: cover;
     display: block;
     position: relative;
-    z-index: 0;                      /* 在发光层下面 */
+                     /* 在发光层上面 */
 }
 
 /* ===== 响应式（手机） ===== */
