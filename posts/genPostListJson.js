@@ -1,8 +1,8 @@
 // 浏览器版：直接通过 GitHub API 获取文件列表并返回
 async function genPostList() {
     // ===== 配置 =====
-    const OWNER = '你的用户名';           // 改成你的
-    const REPO = '你的用户名.github.io';  // 改成你的仓库名
+    const OWNER = 'AFish123222';           // 改成你的
+    const REPO = 'AFish123222.github.io';  // 改成你的仓库名
     const DIR = 'posts/postfiles';
 
     try {
