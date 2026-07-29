@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>发帖</title>
+</head>
+<body>
+<h2>📤 发布新帖</h2>
+<input id="token" type="password" placeholder="粘贴 GitHub 令牌" style="width:400px"><br><br>
+<input id="title" placeholder="标题" style="width:400px"><br><br>
+<textarea id="content" placeholder="内容（支持HTML标签）" rows="10" style="width:400px"></textarea><br><br>
+<button onclick="publish()">🚀 直接上传</button>
+<div id="msg"></div>
+
+<script>
+  async function publish() {
+    const token = document.getElementById('token').value;
+    const title = document.getElementById('title').value;
+    const content = document.getElementById('content').value;
+    if (!token || !title || !content) return alert('请填完整');
+
+    // 替换成你的用户名和仓库名
+    const OWNER = '你的用户名';
+    const REPO = '你的用户名.github.io';
+    const path = `posts/${new Date().toISOString().slice(0,10)}-${title.replace(/\s/g,'-')}.html`;
+
+    const html = `<!DOCTYPE html>
+      <html><head><meta charset="UTF-8"><title>${title}</title></head>
+      <body><h1>${title}</h1><div>${content}</div>
+      <p><a href="../index.html">← 返回首页</a></p></body></html>`;
+
+    const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify({
+        message: `发布: ${title}`,
+        content: btoa(unescape(encodeURIComponent(html)))
+      })
+    });
+
+    const result = await res.json();
+    document.getElementById('msg').innerHTML = res.ok
+            ? `✅ 发布成功！<a href="../${path}" target="_blank">点此查看</a>`
+            : `❌ 失败：${result.message}`;
+  }
+</script>
+</body>
+</html>
