@@ -1,0 +1,168 @@
+/* ===== 全局重置 & 背景 ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #533483 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* ===== 左上角固定标题卡片 ===== */
+.title-card {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 24px;
+    padding: 18px 28px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    color: #ffffff;
+    font-size: 2.2rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    z-index: 100;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.title-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ===== 卡片堆叠容器（居中） ===== */
+.card-stack {
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+    margin-top: 100px;  /* 避让左上角标题 */
+}
+
+/* ===== 通用卡片样式 ===== */
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 24px;
+    padding: 24px 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    color: #ffffff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ===== 描述卡片 ===== */
+.card-desc {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* ===== 分割线卡片（装饰） ===== */
+.card-divider {
+    padding: 0 30px;
+    background: transparent;
+    backdrop-filter: none;
+    border: none;
+    box-shadow: none;
+}
+.card-divider hr {
+    width: 80%;
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+    margin: 0 auto;
+}
+
+/* ===== 链接卡片（按钮） ===== */
+.card-link {
+    display: block;
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 16px 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+.card-link:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(83, 52, 131, 0.5);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+.card-link:active {
+    transform: scale(0.97);
+}
+/* ===== 头像卡片专用样式 ===== */
+#avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;          /* 内部留白，防止图片紧贴边框 */
+    /* 其他样式继承自 .card-link，无需重复 */
+}
+
+#avatar img {
+    width: 120px;           /* 头像尺寸，可调整 */
+    height: 120px;
+    border-radius: 50%;     /* 圆形裁剪 */
+    object-fit: cover;      /* 保持比例填充 */
+    display: block;         /* 防止底部留白 */
+    border: 3px solid rgba(255,255,255,0.3); /* 可选边框 */
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+/* 悬停时头像放大，增强交互 */
+#avatar:hover img {
+    transform: scale(1.05);
+    border-color: rgba(255,255,255,0.7);
+}
+
+
+/* ===== 响应式（手机） ===== */
+@media (max-width: 480px) {
+    .title-card {
+        top: 15px;
+        left: 15px;
+        font-size: 1.6rem;
+        padding: 12px 18px;
+    }
+    .card-stack {
+        margin-top: 80px;
+    }
+    .card-desc {
+        font-size: 1rem;
+        padding: 14px 20px;
+    }
+    .card-link {
+        font-size: 1rem;
+        padding: 14px 20px;
+    }
+    .card-stack {
+        gap: 16px;
+    }
+}

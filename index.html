@@ -2,142 +2,29 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Fish'碎碎念</title>
-    <style>
-        /* ===== 全局重置 & 背景 ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            min-height: 100vh;
-            /* 蓝紫渐变背景 */
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #533483 100%);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* ===== 卡片容器（垂直堆叠） ===== */
-        .card-stack {
-            max-width: 600px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;  /* 让所有子元素宽度一致 */
-            gap: 24px;            /* 卡片间距 */
-        }
-
-        /* ===== 通用卡片样式 ===== */
-        .card {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 24px;
-            padding: 24px 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-            text-align: center;
-            color: #ffffff;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-        }
-
-        /* ===== 标题卡片（大号） ===== */
-        .card-title {
-            font-size: 2.6rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            padding: 30px 30px;
-        }
-
-        /* ===== 描述卡片（中号） ===== */
-        .card-desc {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.85);
-            padding: 18px 30px;
-        }
-
-        /* ===== 链接卡片（按钮样式） ===== */
-        .card-link {
-            display: block;          /* 让链接占满卡片宽度 */
-            text-decoration: none;
-            color: #ffffff;
-            font-size: 1.2rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            padding: 16px 30px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .card-link:hover {
-            background: rgba(255, 255, 255, 0.28);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(83, 52, 131, 0.5);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        .card-link:active {
-            transform: scale(0.97);
-        }
-
-        /* ===== 分割线卡片（装饰） ===== */
-        .card-divider {
-            padding: 0 30px;
-            background: transparent;
-            backdrop-filter: none;
-            border: none;
-            box-shadow: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .card-divider hr {
-            width: 80%;
-            border: none;
-            height: 2px;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
-        }
-
-        /* ===== 响应式调整 ===== */
-        @media (max-width: 480px) {
-            .card-title { font-size: 2rem; padding: 20px; }
-            .card-desc { font-size: 1rem; padding: 14px 20px; }
-            .card-link { font-size: 1rem; padding: 14px 20px; }
-            .card-stack { gap: 16px; }
-        }
-    </style>
+    <title>Fish's Blog</title>
+    <link rel="stylesheet" href="HomeIndexStyle.css">
 </head>
 <body>
+
+<!-- 左上角固定标题 -->
+<div class="title-card"></div>
+
+
+
+<!-- 卡片堆叠 -->
 <div class="card-stack">
-    <!-- 标题卡片 -->
-    <div class="card card-title">碎碎念</div>
-
-    <!-- 描述卡片 -->
+    <!-- 头像 -->
+    <a href="posts/index.html"
+       id = "avatar"
+       class = "card-link"
+    >
+        <img src="" alt="avatar">
+    </a>
     <div class="card card-desc">首页会显示所有帖子列表（后续可自动生成）</div>
-
-    <!-- 分割线卡片（装饰） -->
     <div class="card card-divider"><hr></div>
-
-    <!-- 链接卡片 -->
     <a href="admin.html" class="card-link">📤 去发帖</a>
-
-    <!-- 后续可以在这里继续添加其他卡片，比如帖子列表卡片 -->
 </div>
+
 </body>
 </html>
