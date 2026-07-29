@@ -190,7 +190,7 @@
             listContainer.innerHTML = posts.map(post => {
                 const filePath = `postfiles/${post.filename}`;
                 return `
-                <div class="post-item" onclick="window.location.href='posts/post.html?url=${encodeURIComponent(filePath)}'">
+                <div class="post-item" onclick="window.location.href='/post.html?url=${encodeURIComponent(filePath)}'">
                     <span class="post-title">${post.title}</span>
                     <span class="post-date">${post.date}</span>
                 </div>
