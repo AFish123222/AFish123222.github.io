@@ -1,11 +1,11 @@
+import(genPostList())
 
     const OWNER = 'AFish12322';           // 改成你的 GitHub 用户名
     const REPO = 'AFish123222.github.io';  // 改成你的仓库名
     const POSTS_DIR = 'posts';
 
     async function fetchPosts() {
-        const res = await fetch('./posts/index.json');
-        return await res.json();   // 直接返回数组，不再过滤
+        return window.genPostList();
     }
 
     function renderPosts(posts) {
