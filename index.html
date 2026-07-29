@@ -18,23 +18,15 @@
 <!-- 卡片堆叠 -->
 <div class="card-stack">
 <!--    <div class="card card-desc">首页会显示所有帖子列表（后续可自动生成）</div>-->
-    <!-- 帖子列表卡片 -->
-    <a href="posts" style="text-decoration: none;">
-        <div class="card" id="post-list" style="text-align: left; padding: 20px 30px;" >
-            <div style="font-weight: 500; margin-bottom: 12px; color: rgba(255,255,255,0.6); font-size: 0.9rem;">
-                📄 最近更新
-            </div>
-            <div id="posts-container">
-                <p style="color: rgba(255,255,255,0.4);">加载中...</p>
-            </div>
-        </div>
+
+    <!-- 文章列表链接卡片 -->
+    <a href="posts" class="card" style="padding-bottom: 16px;text-decoration: none">
+        <div class="main-title">📚 所有文章</div>
     </a>
 
     <div class="card card-divider"><hr></div>
     <a href="admin.html" class="card-link">📤 去发帖</a>
 </div>
-
-<script src="posts/getPost.js"></script>
 
 </body>
 </html>
