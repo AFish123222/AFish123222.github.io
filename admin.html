@@ -25,10 +25,7 @@
     const REPO = 'AFish123222.github.io';
     const path = `posts/postfiles/${new Date().toISOString().slice(0,10)}-${title.replace(/\s/g,'-')}.html`;
 
-    const html = `<!DOCTYPE html>
-      <html><head><meta charset="UTF-8"><title>${title}</title></head>
-      <body><h1>${title}</h1><div>${content}</div>
-      <p><a href="../index.html">← 返回首页</a></p></body></html>`;
+    const html = `${content}`;
 
     const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
       method: 'PUT',
