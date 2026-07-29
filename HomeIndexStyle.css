@@ -218,3 +218,22 @@ body {
         gap: 16px;
     }
 }
+/* ===== 头像光晕（已在 inline style 中实现，这里不再重复） ===== */
+
+/* ===== 名字样式 ===== */
+#name {
+    display: block;
+    margin-top: 12px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #a78bfa;                /* 紫色 */
+    text-decoration: none;
+    letter-spacing: 2px;
+    transform: scale(1);
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+#name:hover {
+    transform: scale(1.15);        /* 悬停放大 */
+    color: #c4b5fd;                /* 更亮的紫色 */
+}
