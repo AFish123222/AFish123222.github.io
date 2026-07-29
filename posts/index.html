@@ -172,8 +172,6 @@
 <script>
     (async function() {
         try {
-            const res = await fetch('./index.json'); // 与当前页面同级
-            if (!res.ok) throw new Error('列表加载失败');
             const posts = await window.genPostList();
             console.log(posts);
 
@@ -190,7 +188,7 @@
             listContainer.innerHTML = posts.map(post => {
                 const filePath = `postfiles/${post.filename}`;
                 return `
-                <div class="post-item" onclick="window.location.href='/postfiles/${encodeURIComponent(filePath)}'">
+                <div class="post-item" onclick="window.location.href='${encodeURIComponent(filePath)}'">
                     <span class="post-title">${post.title}</span>
                     <span class="post-date">${post.date}</span>
                 </div>
