@@ -1,6 +1,6 @@
 
-    const OWNER = '你的用户名';           // 改成你的 GitHub 用户名
-    const REPO = '你的用户名.github.io';  // 改成你的仓库名
+    const OWNER = 'AFish12322';           // 改成你的 GitHub 用户名
+    const REPO = 'AFish123222.github.io';  // 改成你的仓库名
     const POSTS_DIR = 'posts';
 
     async function fetchPosts() {
