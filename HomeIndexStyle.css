@@ -169,13 +169,31 @@ body {
 }
 
 #avatar img {
-    width: 120px;
-    height: 120px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     object-fit: cover;
     display: block;
     position: relative;
                      /* 在发光层上面 */
+}
+
+/* 名字样式 */
+#name {
+    display: block;
+    margin-top: 12px;              /* 与头像的间距 */
+    font-size: 2.0rem;
+    font-weight: 500;
+    color: #8c6ee3;                /* 紫罗兰色（柔和紫） */
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+    letter-spacing: 1px;
+}
+
+/* 悬停时颜色变亮 + 微微上浮 */
+#name:hover {
+    transform: scale(1.2);
+    transform: translateY(-2px);
 }
 
 /* ===== 响应式（手机） ===== */
