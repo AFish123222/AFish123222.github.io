@@ -168,14 +168,14 @@
     <!-- 返回首页（卡片按钮） -->
     <a href="../index.html" class="back-link">← 返回首页</a>
 </div>
-
+<script src="genPostListJson.js"></script>
 <script>
-    // ===== 加载 posts/index.json 并渲染列表 =====
     (async function() {
         try {
             const res = await fetch('./index.json'); // 与当前页面同级
             if (!res.ok) throw new Error('列表加载失败');
-            const posts = await res.json();
+            const posts = await window.genPostList();
+            console.log(posts);
 
             const listContainer = document.getElementById('post-list');
             const countSpan = document.getElementById('total-count');
