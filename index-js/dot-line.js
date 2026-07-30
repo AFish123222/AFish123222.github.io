@@ -7,6 +7,7 @@
     count: 50,                // 初始粒子数量
     maxParticles: 300,        // 粒子总数上限（防止卡顿）
     maxDist: 140,             // 连线最大距离（px）
+    minLinks: 1,           // ★ 新增：最小连接数（每个粒子至少连接1条）
     maxLinks: 2,              // ★ 每个粒子最多连接数（已改为2）
     radius: 1.0,              // 粒子半径
     lineColor: '120, 200, 255',   // 线条颜色 (R,G,B)
@@ -57,6 +58,8 @@
     this.vy = Math.sin(angle) * spd;
     this.radius = CONFIG.radius;
     this.linkAlphas = {};
+        // 随机生成该粒子允许的最大连接数（在 minLinks 和 maxLinks 之间）
+    this.maxLinks = CONFIG.minLinks + Math.floor(Math.random() * (CONFIG.maxLinks - CONFIG.minLinks + 1));
 }
 
     update(w, h) {
@@ -370,7 +373,7 @@
 
     function updateLinkAlphas() {
     const maxDist = CONFIG.maxDist;
-    const maxLinks = CONFIG.maxLinks;
+        const maxLinks = pi.maxLinks;   // 使用每个粒子自己的连接数上限
     const fadeSpeed = CONFIG.fadeSpeed;
 
     for (let i = 0; i < particles.length; i++) {
