@@ -161,10 +161,10 @@
     function initParticles() {
         const docWidth = document.documentElement.scrollWidth;
         const docHeight = document.documentElement.scrollHeight;
-        canvas.width = docWidth;
-        canvas.height = docHeight;
+        W=canvas.width = docWidth;
+        H=canvas.height = docHeight;
         // 生成粒子时使用文档尺寸
-        particles = Array.from({ length: CONFIG.count }, () => new Particle(undefined, undefined, docWidth, docHeight));
+        particles = Array.from({ length: CONFIG.count }, () => new Particle(undefined, undefined, W, H));
 }
 
     function resize() {
