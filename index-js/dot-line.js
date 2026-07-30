@@ -7,8 +7,8 @@
     count: 50,                // 初始粒子数量
     maxParticles: 300,        // 粒子总数上限（防止卡顿）
     maxDist: 140,             // 连线最大距离（px）
-    minLinks: 1-1,           // ★ 新增：最小连接数（每个粒子至少连接1条）
-    maxLinks: 4-1,              // ★ 每个粒子最多连接数（已改为2）
+    minLinks: 1,           // ★ 新增：最小连接数（每个粒子至少连接1条）
+    maxLinks: 4,              // ★ 每个粒子最多连接数（已改为2）
     radius: 1.0,              // 粒子半径
     lineColor: '120, 200, 255',   // 线条颜色 (R,G,B)
     particleColor: '180, 220, 255', // 粒子颜色
@@ -36,9 +36,9 @@
 
         bondLength: 60,          // 键的平衡长度 (px)
         bondFormDist: 75,        // 形成新键的最大距离
-        bondBreakDist: 100,      // 断开键的阈值距离
+        bondBreakDist: 75,      // 断开键的阈值距离
         bondSpring: 0.08,        // 弹簧刚度
-        bondDamping: 0.5,        // 键阻尼（抑制振荡）
+        bondDamping: 0.0,        // 键阻尼（抑制振荡）
 
     targetSelector: [
         '#main-title',
