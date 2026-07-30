@@ -159,10 +159,12 @@
 
     // 强制初始化
     function initParticles() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-    particles = Array.from({ length: CONFIG.count }, () => new Particle(undefined, undefined, W, H));
-    console.log(`✅ 已生成 ${particles.length} 个粒子`);
+        const docWidth = document.documentElement.scrollWidth;
+        const docHeight = document.documentElement.scrollHeight;
+        canvas.width = docWidth;
+        canvas.height = docHeight;
+        // 生成粒子时使用文档尺寸
+        particles = Array.from({ length: CONFIG.count }, () => new Particle(undefined, undefined, docWidth, docHeight));
 }
 
     function resize() {
