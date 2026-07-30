@@ -32,6 +32,8 @@
 
     spawnRadius: 80,          // 点击生成时粒子散布半径
     spawnCount: 3,            // 每次点击生成粒子数量
+
+    targetSelector: ['#main-title']   // ★ 要碰撞的元素选择器（支持任何 CSS 选择器）
 };
 
     class Particle {
@@ -62,6 +64,58 @@
 
     const spdLimit = CONFIG.maxSpeed;
     const currentSpd = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+        // ---- 碰撞检测：与目标 DOM 元素反弹 ----
+// ---- 碰撞检测：与多个目标 DOM 元素反弹 ----
+        if (CONFIG.targetSelector && CONFIG.targetSelector.length) {
+            // 遍历每个选择器
+            for (let sel of CONFIG.targetSelector) {
+                const elements = document.querySelectorAll(sel);
+                for (let el of elements) {
+                    const rect = el.getBoundingClientRect();
+                    const left = rect.left, right = rect.right, top = rect.top, bottom = rect.bottom;
+                    const r = this.radius;
+
+                    // 如果粒子进入元素区域
+                    if (this.x + r > left && this.x - r < right &&
+                        this.y + r > top && this.y - r < bottom) {
+
+                        const cx = (left + right) / 2;
+                        const cy = (top + bottom) / 2;
+                        const dx = this.x - cx;
+                        const dy = this.y - cy;
+                        const len = Math.sqrt(dx*dx + dy*dy);
+                        if (len < 0.01) {
+                            this.x = left - r - 5;
+                            this.vx = Math.abs(this.vx) + 0.5;
+                            this.vy = (Math.random() - 0.5) * 0.5;
+                            break;
+                        }
+                        const nx = dx / len, ny = dy / len;
+
+                        // 计算重叠方向
+                        const overlapX = (this.x + r - left) < (right - (this.x - r))
+                            ? (this.x + r - left) : (right - (this.x - r));
+                        const overlapY = (this.y + r - top) < (bottom - (this.y - r))
+                            ? (this.y + r - top) : (bottom - (this.y - r));
+
+                        if (overlapX < overlapY) {
+                            this.vx = -this.vx * 0.8;
+                            if (this.x < cx) this.x = left - r - 1;
+                            else this.x = right + r + 1;
+                        } else {
+                            this.vy = -this.vy * 0.8;
+                            if (this.y < cy) this.y = top - r - 1;
+                            else this.y = bottom + r + 1;
+                        }
+                        this.vx += (Math.random() - 0.5) * 0.3;
+                        this.vy += (Math.random() - 0.5) * 0.3;
+                        break; // 撞到一个就退出循环，防止多重反弹
+                    }
+                }
+            }
+        }
+// ---- 碰撞检测结束 ----
+        // ---- 碰撞检测结束 ----
     if (currentSpd > spdLimit) {
     this.vx = (this.vx / currentSpd) * spdLimit;
     this.vy = (this.vy / currentSpd) * spdLimit;
