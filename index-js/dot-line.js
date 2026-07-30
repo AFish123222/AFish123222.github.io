@@ -8,7 +8,7 @@
     maxParticles: 300,        // 粒子总数上限（防止卡顿）
     maxDist: 140,             // 连线最大距离（px）
     maxLinks: 2,              // ★ 每个粒子最多连接数（已改为2）
-    radius: 2.0,              // 粒子半径
+    radius: 1.0,              // 粒子半径
     lineColor: '120, 200, 255',   // 线条颜色 (R,G,B)
     particleColor: '180, 220, 255', // 粒子颜色
 
@@ -72,54 +72,92 @@
     const currentSpd = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
         // ---- 碰撞检测：与目标 DOM 元素反弹 ----
 // ---- 碰撞检测：与多个目标 DOM 元素反弹 ----
+// ---- 碰撞检测：与多个目标 DOM 元素反弹 ----
+// ---- 碰撞检测：与多个目标 DOM 元素反弹 ----
+// ---- 碰撞检测：与多个目标 DOM 元素反弹 ----
         if (CONFIG.targetSelector && CONFIG.targetSelector.length) {
-            // 遍历每个选择器
+            // ★ 关键：获取 canvas 的缩放比例，将视口坐标转换为 canvas 像素坐标
+            const canvasRect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / canvasRect.width;
+            const scaleY = canvas.height / canvasRect.height;
+
+            let collided = false;
             for (let sel of CONFIG.targetSelector) {
+                if (collided) break;
                 const elements = document.querySelectorAll(sel);
                 for (let el of elements) {
+                    if (collided) break;
                     const rect = el.getBoundingClientRect();
-                    const left = rect.left, right = rect.right, top = rect.top, bottom = rect.bottom;
+
+                    // ★ 将元素边界从视口坐标转换到 canvas 像素坐标
+                    const left = (rect.left - canvasRect.left) * scaleX;
+                    const right = (rect.right - canvasRect.left) * scaleX;
+                    const top = (rect.top - canvasRect.top) * scaleY;
+                    const bottom = (rect.bottom - canvasRect.top) * scaleY;
+
                     const r = this.radius;
 
-                    // 如果粒子进入元素区域
+                    // 检测粒子是否进入元素区域
                     if (this.x + r > left && this.x - r < right &&
                         this.y + r > top && this.y - r < bottom) {
 
+                        // 计算元素中心
                         const cx = (left + right) / 2;
                         const cy = (top + bottom) / 2;
                         const dx = this.x - cx;
                         const dy = this.y - cy;
-                        const len = Math.sqrt(dx*dx + dy*dy);
+                        const len = Math.sqrt(dx * dx + dy * dy);
+
+                        // 粒子在元素中心附近 → 强制弹出（防止卡死）
                         if (len < 0.01) {
-                            this.x = left - r - 5;
-                            this.vx = Math.abs(this.vx) + 0.5;
-                            this.vy = (Math.random() - 0.5) * 0.5;
+                            this.x = left - r - 1;
+                            this.vx = Math.abs(this.vx) + 0.3;
+                            this.vy = (Math.random() - 0.5) * 0.3;
+                            collided = true;
                             break;
                         }
-                        const nx = dx / len, ny = dy / len;
 
-                        // 计算重叠方向
-                        const overlapX = (this.x + r - left) < (right - (this.x - r))
-                            ? (this.x + r - left) : (right - (this.x - r));
-                        const overlapY = (this.y + r - top) < (bottom - (this.y - r))
-                            ? (this.y + r - top) : (bottom - (this.y - r));
+                        // ★ 改进：根据粒子从哪个方向进入来决定反弹方向
+                        // 计算粒子与元素边界的重叠量
+                        const overlapLeft = (this.x + r) - left;
+                        const overlapRight = right - (this.x - r);
+                        const overlapTop = (this.y + r) - top;
+                        const overlapBottom = bottom - (this.y - r);
 
-                        if (overlapX < overlapY) {
-                            this.vx = -this.vx * 0.8;
-                            if (this.x < cx) this.x = left - r - 1;
-                            else this.x = right + r + 1;
-                        } else {
-                            this.vy = -this.vy * 0.8;
-                            if (this.y < cy) this.y = top - r - 1;
-                            else this.y = bottom + r + 1;
+                        // 找到最小重叠方向（粒子从哪个方向穿入）
+                        const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+
+                        if (minOverlap === overlapLeft) {
+                            // 从左边界穿入 → 水平反弹，推出到左边界外
+                            this.vx = -Math.abs(this.vx) * 0.8;
+                            this.x = left - r - 0.5;
+                        } else if (minOverlap === overlapRight) {
+                            // 从右边界穿入 → 水平反弹
+                            this.vx = Math.abs(this.vx) * 0.8;
+                            this.x = right + r + 0.5;
+                        } else if (minOverlap === overlapTop) {
+                            // 从顶边界穿入 → 垂直反弹
+                            this.vy = -Math.abs(this.vy) * 0.8;
+                            this.y = top - r - 0.5;
+                        } else if (minOverlap === overlapBottom) {
+                            // 从底边界穿入 → 垂直反弹
+                            this.vy = Math.abs(this.vy) * 0.8;
+                            this.y = bottom + r + 0.5;
                         }
-                        this.vx += (Math.random() - 0.5) * 0.3;
-                        this.vy += (Math.random() - 0.5) * 0.3;
-                        break; // 撞到一个就退出循环，防止多重反弹
+
+                        // 加少量随机扰动，使反弹更自然
+                        this.vx += (Math.random() - 0.5) * 0.15;
+                        this.vy += (Math.random() - 0.5) * 0.15;
+
+                        collided = true;
+                        break;
                     }
                 }
             }
         }
+// ---- 碰撞检测结束 ----
+// ---- 碰撞检测结束 ----
+// ---- 碰撞检测结束 ----
 // ---- 碰撞检测结束 ----
         // ---- 碰撞检测结束 ----
     if (currentSpd > spdLimit) {
@@ -196,44 +234,48 @@
 });
 
     canvas.addEventListener('click', function(e) {
+            // 1. 获取 canvas 的边界和实际像素尺寸
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;   // 像素与CSS比例
+            const scaleY = canvas.height / rect.height;
 
-        // clickSpawnDots
-        const r = canvas.getBoundingClientRect();
-        // 计算画布像素坐标
-        const scaleX = canvas.width / rect.width;   // 像素与CSS比例
-        const scaleY = canvas.height / rect.height;
-        const x = (e.clientX - rect.left) * scaleX;
-        const y = (e.clientY - rect.top) * scaleY;
-        mouse.x = x;
-        mouse.y = y;
-        const mx = e.clientX - r.left;
-        const my = e.clientY - r.top;
+            // 2. 计算鼠标在画布像素坐标中的位置
+            const mx = (e.clientX - rect.left) * scaleX;
+            const my = (e.clientY - rect.top) * scaleY;
 
-        const count = CONFIG.spawnCount;
-        const radius = CONFIG.spawnRadius;
-        const maxP = CONFIG.maxParticles;
+            // 3. 限制在画布范围内
+            const clampedX = Math.max(0, Math.min(canvas.width, mx));
+            const clampedY = Math.max(0, Math.min(canvas.height, my));
 
-        if (particles.length + count > maxP) {
-            const removeCount = particles.length + count - maxP;
-            particles.splice(0, removeCount);
-        }
+            // 4. 生成粒子
+            const count = CONFIG.spawnCount;
+            const radius = CONFIG.spawnRadius;
+            const maxP = CONFIG.maxParticles;
 
-        for (let i = 0; i < count; i++) {
-            const angle = Math.random() * Math.PI * 2;
-            const dist = Math.random() * radius;
-            const px = mx + Math.cos(angle) * dist;
-            const py = my + Math.sin(angle) * dist;
-            const clampedX = Math.max(0, Math.min(W, px));
-            const clampedY = Math.max(0, Math.min(H, py));
-            const p = new Particle(clampedX, clampedY, W, H);
-            const spd = CONFIG.baseSpeed * (0.3 + Math.random() * 0.7);
-            const a = Math.random() * Math.PI * 2;
-            p.vx = Math.cos(a) * spd;
-            p.vy = Math.sin(a) * spd;
-            particles.push(p);
-        }
-        console.log(`✨ 生成 ${count} 个粒子，当前总数: ${particles.length}`);
-});
+            if (particles.length + count > maxP) {
+                const removeCount = particles.length + count - maxP;
+                particles.splice(0, removeCount);
+            }
+
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * radius;
+                const px = clampedX + Math.cos(angle) * dist;
+                const py = clampedY + Math.sin(angle) * dist;
+
+                // 限制在画布范围内
+                const finalX = Math.max(0, Math.min(canvas.width, px));
+                const finalY = Math.max(0, Math.min(canvas.height, py));
+
+                const p = new Particle(finalX, finalY, canvas.width, canvas.height);
+                const spd = CONFIG.baseSpeed * (0.3 + Math.random() * 0.7);
+                const a = Math.random() * Math.PI * 2;
+                p.vx = Math.cos(a) * spd;
+                p.vy = Math.sin(a) * spd;
+                particles.push(p);
+            }
+            console.log(`✨ 生成 ${count} 个粒子，当前总数: ${particles.length}`);
+        });
 
     canvas.addEventListener('touchmove', function(e) {
     e.preventDefault();
