@@ -37,7 +37,8 @@
         '#main-title',
         '#avatar',
         '#name',
-        '.card'
+        '.card',
+        '.card-link'
     ]   // ★ 要碰撞的元素选择器（支持任何 CSS 选择器）
 };
 
