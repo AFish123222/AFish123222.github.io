@@ -33,7 +33,12 @@
     spawnRadius: 80,          // 点击生成时粒子散布半径
     spawnCount: 3,            // 每次点击生成粒子数量
 
-    targetSelector: ['#main-title']   // ★ 要碰撞的元素选择器（支持任何 CSS 选择器）
+    targetSelector: [
+        '#main-title',
+        '#avatar',
+        '#name',
+        '.card'
+    ]   // ★ 要碰撞的元素选择器（支持任何 CSS 选择器）
 };
 
     class Particle {
