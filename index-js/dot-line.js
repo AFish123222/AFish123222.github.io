@@ -72,6 +72,7 @@
     this.vx = Math.cos(angle) * spd;
     this.vy = Math.sin(angle) * spd;
     this.radius = CONFIG.radius;
+        this.bonds = [];
     this.linkAlphas = {};
         // 随机生成该粒子允许的最大连接数（在 minLinks 和 maxLinks 之间）
     this.maxLinks = CONFIG.minLinks + Math.floor(Math.random() * (CONFIG.maxLinks - CONFIG.minLinks + 1));
@@ -581,6 +582,8 @@
     // updateLinkAlphas();
 
     for (let p of particles) p.draw(ctx);
+
+    manageBonds();
 
     drawSparseLines();
 
