@@ -188,34 +188,7 @@
 });
 
     canvas.addEventListener('click', function(e) {
-    const r = canvas.getBoundingClientRect();
-    const mx = e.clientX - r.left;
-    const my = e.clientY - r.top;
-
-    const count = CONFIG.spawnCount;
-    const radius = CONFIG.spawnRadius;
-    const maxP = CONFIG.maxParticles;
-
-    if (particles.length + count > maxP) {
-    const removeCount = particles.length + count - maxP;
-    particles.splice(0, removeCount);
-}
-
-    for (let i = 0; i < count; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const dist = Math.random() * radius;
-    const px = mx + Math.cos(angle) * dist;
-    const py = my + Math.sin(angle) * dist;
-    const clampedX = Math.max(0, Math.min(W, px));
-    const clampedY = Math.max(0, Math.min(H, py));
-    const p = new Particle(clampedX, clampedY, W, H);
-    const spd = CONFIG.baseSpeed * (0.3 + Math.random() * 0.7);
-    const a = Math.random() * Math.PI * 2;
-    p.vx = Math.cos(a) * spd;
-    p.vy = Math.sin(a) * spd;
-    particles.push(p);
-}
-    console.log(`✨ 生成 ${count} 个粒子，当前总数: ${particles.length}`);
+        clickSpawnDots();
 });
 
     canvas.addEventListener('touchmove', function(e) {
@@ -440,6 +413,37 @@
     ctx.stroke();
 }
 }
+
+    function clickSpawnDots() {
+        const r = canvas.getBoundingClientRect();
+        const mx = e.clientX - r.left;
+        const my = e.clientY - r.top;
+
+        const count = CONFIG.spawnCount;
+        const radius = CONFIG.spawnRadius;
+        const maxP = CONFIG.maxParticles;
+
+        if (particles.length + count > maxP) {
+            const removeCount = particles.length + count - maxP;
+            particles.splice(0, removeCount);
+        }
+
+        for (let i = 0; i < count; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const dist = Math.random() * radius;
+            const px = mx + Math.cos(angle) * dist;
+            const py = my + Math.sin(angle) * dist;
+            const clampedX = Math.max(0, Math.min(W, px));
+            const clampedY = Math.max(0, Math.min(H, py));
+            const p = new Particle(clampedX, clampedY, W, H);
+            const spd = CONFIG.baseSpeed * (0.3 + Math.random() * 0.7);
+            const a = Math.random() * Math.PI * 2;
+            p.vx = Math.cos(a) * spd;
+            p.vy = Math.sin(a) * spd;
+            particles.push(p);
+        }
+        console.log(`✨ 生成 ${count} 个粒子，当前总数: ${particles.length}`);
+    }
 
     function animate() {
     ctx.clearRect(0, 0, W, H);
