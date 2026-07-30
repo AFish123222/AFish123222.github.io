@@ -5,46 +5,38 @@
     <title>Fishの小角角</title>
     <link rel="stylesheet" href="HomeIndexStyle.css">
     <style>
-        /* ===== 背景壁纸层 ===== */
-        .bg-wallpaper {
-            position: fixed;          /* 固定定位，不随滚动 */
+        /* 在 body 上直接加载背景壁纸 */
+        body {
+            /* 保留原有的蓝紫渐变作为底色 */
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460, #533483);
+            /* 用伪元素承载壁纸，不影响内容 */
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 0;               /* 放在所有内容下面 */
+            z-index: 0;
+            /* 从 CSS 加载图片 */
             background-image: url('img/img1.png');
-            background-size: cover;   /* 铺满屏幕，可改为 contain 或具体尺寸 */
+            background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-
-            /* 关键：上下渐变透明（让壁纸与背景色融合） */
-            mask-image: linear-gradient(to bottom,
-            rgba(0, 0, 0, 1) 0%,
-            rgba(0, 0, 0, 0.8) 20%,
-            rgba(0, 0, 0, 0) 100%
-            );
-            -webkit-mask-image: linear-gradient(to bottom,
-            rgba(0, 0, 0, 1) 0%,
-            rgba(0, 0, 0, 0.8) 20%,
-            rgba(0, 0, 0, 0) 100%
-            );
+            /* 上下渐变透明（顶部不透明 → 底部完全透明） */
+            mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+            pointer-events: none;  /* 让点击穿透，不干扰内容 */
         }
 
         /* 确保所有内容在壁纸之上 */
-        body {
+        body > * {
             position: relative;
             z-index: 1;
         }
-
-        /* 如果你希望壁纸尺寸固定为 216x468 并居中，可以改成： */
-        /*
-        .bg-wallpaper {
-            background-size: 216px 468px;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-        */
     </style>
 </head>
 <body>
@@ -56,9 +48,7 @@
     </a>
     <a href="links" id="name">@符笙</a>
 </div>
-<div class="wallpaper-wrapper">
-    <img class="wallpaper-img" src="img/img1.png" alt="壁纸">
-</div>
+
 <!-- 卡片堆叠 -->
 <div class="card-stack">
 <!--    <div class="card card-desc">首页会显示所有帖子列表（后续可自动生成）</div>-->
