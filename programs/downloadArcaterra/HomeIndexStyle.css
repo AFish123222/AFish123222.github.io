@@ -1,0 +1,245 @@
+/* ===== 全局重置 & 背景 ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #533483 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;      /* 改为纵向排列 */
+    align-items: center;         /* 水平居中所有子元素 */
+    justify-content: center;     /* 垂直居中整个列（可选） */
+    padding: 20px;
+}
+
+/* ===== 左上角固定标题卡片 ===== */
+.title-card {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 24px;
+    padding: 18px 28px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    color: #ffffff;
+    font-size: 2.2rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    z-index: 100;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.title-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ===== 卡片堆叠容器（居中） ===== */
+.card-stack {
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+    margin-top: 100px;  /* 避让左上角标题 */
+}
+
+/* ===== 通用卡片样式 ===== */
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 24px;
+    padding: 24px 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    color: #ffffff;
+    /*transition: transform 0.2s ease, box-shadow 0.2s ease;*/
+    transition: all 0.3s ease;
+}
+.card:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(83, 52, 131, 0.5);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+.card:active {
+    transform: scale(0.97);
+}
+
+/* ===== 描述卡片 ===== */
+.card-desc {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* ===== 分割线卡片（装饰） ===== */
+.card-divider {
+    padding: 0 30px;
+    background: transparent;
+    backdrop-filter: none;
+    border: none;
+    box-shadow: none;
+}
+.card-divider hr {
+    width: 80%;
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+    margin: 0 auto;
+}
+
+/* ===== 链接卡片（按钮） ===== */
+.card-link {
+    display: block;
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 16px 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+.card-link:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(83, 52, 131, 0.5);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+.card-link:active {
+    transform: scale(0.97);
+}
+/* ===== 头像卡片专用样式 ===== */
+#avatar {
+    position: relative;              /* 为伪元素定位 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    /* 保留你原本的 box-shadow 外围光晕，如果想要可以保留 */
+    box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.10);
+    transition: box-shadow 0.4s ease, transform 0.3s ease;
+}
+
+#avatar:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 40px 15px rgba(255, 255, 255, 0.20);
+}
+
+/* 核心：发光圆形层（比头像大一圈） */
+#avatar::before {
+    content: '';
+    position: absolute;
+    /* 比头像大 12px（每边大 6px） */
+    top: -6px;
+    left: -6px;
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+    border-radius: 50%;              /* 圆形裁剪 */
+    background: radial-gradient(circle at 50% 50%,
+    rgba(255, 255, 255, 0.30) 0%,
+    rgba(255, 255, 255, 0.05) 60%,
+    transparent 85%
+    );
+    pointer-events: none;            /* 让点击穿透 */
+    z-index: 1;                      /* 在头像上面，但透明部分不遮挡 */
+    transition: opacity 0.4s ease;
+}
+
+#avatar:hover::before {
+    opacity: 0.8;
+    background: radial-gradient(circle at 50% 50%,
+    rgba(255, 255, 255, 0.50) 0%,
+    rgba(255, 255, 255, 0.10) 60%,
+    transparent 85%
+    );
+}
+
+#avatar img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    position: relative;
+                     /* 在发光层上面 */
+}
+
+/* 名字样式 */
+#name {
+    display: block;
+    margin-top: 12px;              /* 与头像的间距 */
+    font-size: 2.0rem;
+    font-weight: 500;
+    color: #8c6ee3;                /* 紫罗兰色（柔和紫） */
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+    letter-spacing: 1px;
+}
+
+/* 悬停时颜色变亮 + 微微上浮 */
+#name:hover {
+    transform: translateY(-2px) scale(1.07);
+}
+
+/* ===== 响应式（手机） ===== */
+@media (max-width: 480px) {
+    .title-card {
+        top: 15px;
+        left: 15px;
+        font-size: 1.6rem;
+        padding: 12px 18px;
+    }
+    .card-stack {
+        margin-top: 80px;
+    }
+    .card-desc {
+        font-size: 1rem;
+        padding: 14px 20px;
+    }
+    .card-link {
+        font-size: 1rem;
+        padding: 14px 20px;
+    }
+    .card-stack {
+        gap: 16px;
+    }
+}
+/* ===== 头像光晕（已在 inline style 中实现，这里不再重复） ===== */
+
+/* ===== 名字样式 ===== */
+#name {
+    display: block;
+    margin-top: 12px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #a78bfa;                /* 紫色 */
+    text-decoration: none;
+    letter-spacing: 2px;
+    transform: scale(1);
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+#name:hover {
+    transform: scale(1.15);        /* 悬停放大 */
+    color: #c4b5fd;                /* 更亮的紫色 */
+}
