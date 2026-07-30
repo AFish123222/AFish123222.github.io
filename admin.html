@@ -5,22 +5,61 @@
   <title>发帖</title>
 </head>
 <body>
-<h2>📤 发布新帖(html)</h2>
-<p>ps:这是作者给自己远程上传用的...</p>
-<input id="token" type="password" placeholder="粘贴 GitHub 令牌" style="width:400px"><br><br>
+<h2>📤 发布新帖 (HTML)</h2>
+<p>ps: 这是作者给自己远程上传用的...</p>
+<br>
+<p>令令令申申申申申!!!宝子你不要link css,直接写就好，单文件啊喂(#`O′)!!!</p>
+
+<input id="token" type="password" placeholder="粘贴 GitHub 令牌(看看有没有写错，过期)空间相册自己找" style="width:400px"><br><br>
+
+<!-- 新增：文件选择器 -->
+<input type="file" id="htmlFile" accept=".html" style="margin-bottom:10px;">
+<span style="font-size:0.9rem; color:gray; margin-left:10px;">（选择 .html 文件->点按钮填充标题和内容->上传）</span>
+<button onclick="loadFile()">📂 加载文件内容</button>
+<br><br>
+
 <input id="title" placeholder="标题" style="width:400px"><br><br>
 <textarea id="content" placeholder="内容（支持HTML标签）" rows="10" style="width:400px"></textarea><br><br>
 <button onclick="publish()">🚀 直接上传</button>
 <div id="msg"></div>
 
 <script>
+  // ===== 文件加载函数 =====
+  function loadFile() {
+    const fileInput = document.getElementById('htmlFile');
+    const file = fileInput.files[0];
+    if (!file) {
+      alert('请先选择一个 .html 文件');
+      return;
+    }
+    // 只允许 .html 文件（通过 accept 已限制，但再检查一次）
+    if (!file.name.toLowerCase().endsWith('.html')) {
+      alert('只支持 .html 文件');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const content = e.target.result;
+      // 将文件名（不含扩展名）作为标题
+      const title = file.name.replace(/\.html$/i, '');
+      document.getElementById('title').value = title;
+      document.getElementById('content').value = content;
+      alert('✅ 文件内容已加载，你可以编辑后再发布。');
+    };
+    reader.onerror = function() {
+      alert('❌ 读取文件失败，请重试。');
+    };
+    reader.readAsText(file, 'UTF-8');
+  }
+
+  // ===== 原有发布函数（不变） =====
   async function publish() {
     const token = document.getElementById('token').value;
     const title = document.getElementById('title').value;
     const content = document.getElementById('content').value;
     if (!token || !title || !content) return alert('请填完整');
 
-    // 替换成你的用户名和仓库名
     const OWNER = 'AFish123222';
     const REPO = 'AFish123222.github.io';
 
@@ -31,9 +70,10 @@
             String(now.getDate()).padStart(2, '0') + '-' +
             String(now.getHours()).padStart(2, '0') + '-' +
             String(now.getMinutes()).padStart(2, '0');
-    const path = `posts/postfiles/${dateStr}-${title.replace(/\s/g,'-')}.html`;
+    const path = `posts/postfiles/${dateStr}-${title.replace(/\s/g, '-')}.html`;
 
-    const html = `${content}`;
+    // 直接使用 content（已包含完整 HTML）
+    const html = content;
 
     const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
       method: 'PUT',
@@ -48,9 +88,9 @@
     });
 
     const result = await res.json();
-    document.getElementById('msg').innerHTML = res.ok
-            ? `✅ 发布成功！<a href="../${path}" target="_blank">点此查看</a>`
-            : `❌ 失败：${result.message}`;
+    document.getElementById('msg').innerHTML = res.ok ?
+            `✅ 发布成功！<a href="../${path}" target="_blank">点此查看</a>` :
+            `❌ 失败：${result.message}`;
   }
 </script>
 </body>
