@@ -12,8 +12,8 @@
     lineColor: '120, 200, 255',   // 线条颜色 (R,G,B)
     particleColor: '180, 220, 255', // 粒子颜色
 
-    baseSpeed: 0.9,           // 基础游走速度（越大越快）
-    turnSpeed: 0.08,          // 随机转向幅度（越大转弯越猛）
+    baseSpeed: 5,           // 基础游走速度（越大越快）
+    turnSpeed: 0.2,          // 随机转向幅度（越大转弯越猛）
     speedJitter: 0.04,        // 速度波动（越大速度变化越随机）
 
     mouseStrength: 0.02,      // 鼠标吸引强度（正数）
