@@ -34,10 +34,10 @@
     spawnRadius: 80,          // 点击生成时粒子散布半径
     spawnCount: 3,            // 每次点击生成粒子数量
 
-        bondLength: 60,          // 键的平衡长度 (px)
+        bondLength: 70,          // 键的平衡长度 (px)
         bondFormDist: 75,        // 形成新键的最大距离
         bondBreakDist: 75,      // 断开键的阈值距离
-        bondSpring: 0.08,        // 弹簧刚度
+        bondSpring: 0.8,        // 弹簧刚度
         bondDamping: 0.0,        // 键阻尼（抑制振荡）
 
     targetSelector: [
