@@ -34,6 +34,12 @@
     spawnRadius: 80,          // 点击生成时粒子散布半径
     spawnCount: 3,            // 每次点击生成粒子数量
 
+        bondLength: 60,          // 键的平衡长度 (px)
+        bondFormDist: 75,        // 形成新键的最大距离
+        bondBreakDist: 100,      // 断开键的阈值距离
+        bondSpring: 0.08,        // 弹簧刚度
+        bondDamping: 0.5,        // 键阻尼（抑制振荡）
+
     targetSelector: [
         '#main-title',
         '#avatar',
@@ -42,6 +48,15 @@
         '.card-link'
     ]   // ★ 要碰撞的元素选择器（支持任何 CSS 选择器）
 };
+
+        class Bond {
+            constructor(p1, p2, targetLen) {
+                this.p1 = p1;
+                this.p2 = p2;
+                this.targetLen = targetLen;
+                this.active = true;
+            }
+        }
 
     class Particle {
     constructor(x, y, w, h) {
@@ -73,10 +88,22 @@
 
     const spdLimit = CONFIG.maxSpeed;
     const currentSpd = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-        // ---- 碰撞检测：与目标 DOM 元素反弹 ----
-// ---- 碰撞检测：与多个目标 DOM 元素反弹 ----
-// ---- 碰撞检测：与多个目标 DOM 元素反弹 ----
-// ---- 碰撞检测：与多个目标 DOM 元素反弹 ----
+
+        // ---- 应用键的弹簧力 ----
+        for (let bond of this.bonds) {
+            const other = (bond.p1 === this) ? bond.p2 : bond.p1;
+            const dx = other.x - this.x;
+            const dy = other.y - this.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 0.01) continue;
+            const force = (dist - bond.targetLen) * CONFIG.bondSpring;
+            const normX = dx / dist, normY = dy / dist;
+            this.vx += normX * force * 0.5;
+            this.vy += normY * force * 0.5;
+            // 阻尼（可减缓振荡）
+            this.vx *= (1 - CONFIG.bondDamping * 0.01);
+            this.vy *= (1 - CONFIG.bondDamping * 0.01);
+        }
 // ---- 碰撞检测：与多个目标 DOM 元素反弹 ----
         if (CONFIG.targetSelector && CONFIG.targetSelector.length) {
             // ★ 关键：获取 canvas 的缩放比例，将视口坐标转换为 canvas 像素坐标
@@ -159,10 +186,6 @@
             }
         }
 // ---- 碰撞检测结束 ----
-// ---- 碰撞检测结束 ----
-// ---- 碰撞检测结束 ----
-// ---- 碰撞检测结束 ----
-        // ---- 碰撞检测结束 ----
     if (currentSpd > spdLimit) {
     this.vx = (this.vx / currentSpd) * spdLimit;
     this.vy = (this.vy / currentSpd) * spdLimit;
@@ -192,6 +215,54 @@
     ctx.fill();
 }
 }
+
+        function manageBonds() {
+            const maxDist = CONFIG.bondFormDist;
+            const breakDist = CONFIG.bondBreakDist;
+            const targetLen = CONFIG.bondLength;
+
+            // 1. 检查现有键，超距则断开
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                for (let j = p.bonds.length - 1; j >= 0; j--) {
+                    const bond = p.bonds[j];
+                    const other = (bond.p1 === p) ? bond.p2 : bond.p1;
+                    const dx = other.x - p.x;
+                    const dy = other.y - p.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist > breakDist) {
+                        // 从两个粒子的 bonds 中移除该键
+                        const idx1 = bond.p1.bonds.indexOf(bond);
+                        if (idx1 !== -1) bond.p1.bonds.splice(idx1, 1);
+                        const idx2 = bond.p2.bonds.indexOf(bond);
+                        if (idx2 !== -1) bond.p2.bonds.splice(idx2, 1);
+                        // 删除键对象（不用管，垃圾回收）
+                    }
+                }
+            }
+
+            // 2. 尝试形成新键（遍历粒子对）
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p1 = particles[i], p2 = particles[j];
+                    // 检查是否已连接（避免重复键）
+                    let already = false;
+                    for (let b of p1.bonds) {
+                        if (b.p1 === p2 || b.p2 === p2) { already = true; break; }
+                    }
+                    if (already) continue;
+                    // 检查连接数限制
+                    if (p1.bonds.length >= p1.maxLinks || p2.bonds.length >= p2.maxLinks) continue;
+                    const dx = p2.x - p1.x, dy = p2.y - p1.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < maxDist) {
+                        const bond = new Bond(p1, p2, targetLen);
+                        p1.bonds.push(bond);
+                        p2.bonds.push(bond);
+                    }
+                }
+            }
+        }
 
     let W, H;
     let particles = [];
@@ -271,7 +342,8 @@
                 const finalY = Math.max(0, Math.min(canvas.height, py));
 
                 const p = new Particle(finalX, finalY, canvas.width, canvas.height);
-                const spd = CONFIG.baseSpeed * (0.3 + Math.random() * 0.7);
+                let spd;
+                spd = CONFIG.baseSpeed * (0.3 + Math.random() * 0.7);
                 const a = Math.random() * Math.PI * 2;
                 p.vx = Math.cos(a) * spd;
                 p.vy = Math.sin(a) * spd;
@@ -420,34 +492,26 @@
 }
 }
 
-    function drawSparseLines() {
-    const lineColor = CONFIG.lineColor;
-    const maxDist = CONFIG.maxDist;
-    for (let i = 0; i < particles.length; i++) {
-    const pi = particles[i];
-    const alphas = pi.linkAlphas;
-    for (let key in alphas) {
-    if (!alphas.hasOwnProperty(key)) continue;
-    const j = parseInt(key);
-    if (j <= i) continue;
-    const pj = particles[j];
-    const alpha = alphas[key];
-    if (alpha <= 0) continue;
-    const dx = pi.x - pj.x;
-    const dy = pi.y - pj.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const ratio = 1 - Math.min(dist / maxDist, 1);
-    const finalAlpha = alpha * ratio * 0.8 + 0.05;
-    if (finalAlpha <= 0) continue;
-    ctx.beginPath();
-    ctx.moveTo(pi.x, pi.y);
-    ctx.lineTo(pj.x, pj.y);
-    ctx.strokeStyle = 'rgba(' + lineColor + ', ' + finalAlpha + ')';
-    ctx.lineWidth = 0.3 + ratio * 0.9;
-    ctx.stroke();
-}
-}
-}
+        function drawSparseLines() {
+            const lineColor = CONFIG.lineColor;
+            for (let p of particles) {
+                for (let bond of p.bonds) {
+                    // 只绘制一次（避免重复绘制同一条键）
+                    if (bond.p1 !== p) continue; // 让每个键只由一端绘制
+                    const other = bond.p2;
+                    const dx = other.x - p.x, dy = other.y - p.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    const ratio = 1 - Math.min(dist / CONFIG.bondLength * 0.5, 1); // 基于距离调整透明度
+                    const alpha = 0.3 + ratio * 0.6;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(other.x, other.y);
+                    ctx.strokeStyle = `rgba(${lineColor}, ${alpha})`;
+                    ctx.lineWidth = 0.8 + ratio * 1.2;
+                    ctx.stroke();
+                }
+            }
+        }
 
     function updateMouseLines() {
     const fadeSpeed = CONFIG.fadeSpeed;
@@ -514,7 +578,7 @@
 
     for (let p of particles) p.update(W, H);
 
-    updateLinkAlphas();
+    // updateLinkAlphas();
 
     for (let p of particles) p.draw(ctx);
 
