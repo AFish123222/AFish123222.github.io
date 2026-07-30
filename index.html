@@ -37,10 +37,18 @@
             position: relative;
             z-index: 1;
         }
+
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(ellipse at center, #141430, #080812);
+            cursor: crosshair;
+        }
     </style>
 </head>
 <body>
-
+<canvas id="canvas"></canvas><script src="index-js/dot-line.js"></script>
 <!-- 头像 -->
 <div style="display: flex; flex-direction: column; align-items: center;">
     <a href="posts" id="avatar" class="card-link">
