@@ -7,8 +7,8 @@
     count: 50,                // 初始粒子数量
     maxParticles: 300,        // 粒子总数上限（防止卡顿）
     maxDist: 140,             // 连线最大距离（px）
-    minLinks: 1,           // ★ 新增：最小连接数（每个粒子至少连接1条）
-    maxLinks: 4,              // ★ 每个粒子最多连接数（已改为2）
+    minLinks: 1-1,           // ★ 新增：最小连接数（每个粒子至少连接1条）
+    maxLinks: 4-1,              // ★ 每个粒子最多连接数（已改为2）
     radius: 1.0,              // 粒子半径
     lineColor: '120, 200, 255',   // 线条颜色 (R,G,B)
     particleColor: '180, 220, 255', // 粒子颜色
@@ -373,11 +373,12 @@
 
     function updateLinkAlphas() {
     const maxDist = CONFIG.maxDist;
-        const maxLinks = this.maxLinks;   // 使用每个粒子自己的连接数上限
+        // const maxLinks = this.maxLinks;   // 使用每个粒子自己的连接数上限
     const fadeSpeed = CONFIG.fadeSpeed;
 
     for (let i = 0; i < particles.length; i++) {
     const pi = particles[i];
+        const maxLinks = pi.maxLinks;   // ← 使用粒子自身的连接数
     const neighbors = [];
     for (let j = 0; j < particles.length; j++) {
     if (i === j) continue;
