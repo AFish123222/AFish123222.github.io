@@ -181,9 +181,14 @@
 }
 
     canvas.addEventListener('mousemove', function(e) {
-    const r = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - r.left;
-    mouse.y = e.clientY - r.top;
+        const rect = canvas.getBoundingClientRect();
+        // 计算画布像素坐标
+        const scaleX = canvas.width / rect.width;   // 像素与CSS比例
+        const scaleY = canvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
+        mouse.x = x;
+        mouse.y = y;
 });
     canvas.addEventListener('mouseleave', function() {
     mouse.x = null;
@@ -191,8 +196,16 @@
 });
 
     canvas.addEventListener('click', function(e) {
+
         // clickSpawnDots
         const r = canvas.getBoundingClientRect();
+        // 计算画布像素坐标
+        const scaleX = canvas.width / rect.width;   // 像素与CSS比例
+        const scaleY = canvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
+        mouse.x = x;
+        mouse.y = y;
         const mx = e.clientX - r.left;
         const my = e.clientY - r.top;
 
