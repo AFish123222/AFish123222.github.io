@@ -5,39 +5,46 @@
     <title>Fishの小角角</title>
     <link rel="stylesheet" href="HomeIndexStyle.css">
     <style>
-        /* 壁纸容器：居中，无背景，无边框 */
-        .wallpaper-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0;          /* 去掉内边距 */
-            margin: 0 auto;
-            background: none;    /* 完全透明 */
-            border: none;
-            box-shadow: none;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-        }
+        /* ===== 背景壁纸层 ===== */
+        .bg-wallpaper {
+            position: fixed;          /* 固定定位，不随滚动 */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;               /* 放在所有内容下面 */
+            background-image: url('img/img1.png');
+            background-size: cover;   /* 铺满屏幕，可改为 contain 或具体尺寸 */
+            background-position: center;
+            background-repeat: no-repeat;
 
-        /* 图片本身：应用上下渐变透明遮罩 */
-        .wallpaper-img {
-            width: 216px;        /* 保持你设定的尺寸 */
-            height: 468px;
-            display: block;
-            object-fit: cover;
-            /* 核心：从上到下渐变透明，顶部不透明，底部完全透明 */
+            /* 关键：上下渐变透明（让壁纸与背景色融合） */
             mask-image: linear-gradient(to bottom,
-            rgba(0, 0, 0, 1) 0%,      /* 顶部完全不透明 */
-            rgba(0, 0, 0, 0.8) 20%,   /* 稍微过渡 */
-            rgba(0, 0, 0, 0) 100%     /* 底部完全透明 */
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 0.8) 20%,
+            rgba(0, 0, 0, 0) 100%
             );
             -webkit-mask-image: linear-gradient(to bottom,
             rgba(0, 0, 0, 1) 0%,
             rgba(0, 0, 0, 0.8) 20%,
             rgba(0, 0, 0, 0) 100%
             );
-            /* 如果希望上下都渐变透明，可以用两个方向叠加，但这里只做从上到下 */
         }
+
+        /* 确保所有内容在壁纸之上 */
+        body {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 如果你希望壁纸尺寸固定为 216x468 并居中，可以改成： */
+        /*
+        .bg-wallpaper {
+            background-size: 216px 468px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        */
     </style>
 </head>
 <body>
