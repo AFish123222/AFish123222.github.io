@@ -8,7 +8,7 @@
     maxParticles: 300,        // 粒子总数上限（防止卡顿）
     maxDist: 140,             // 连线最大距离（px）
     maxLinks: 2,              // ★ 每个粒子最多连接数（已改为2）
-    radius: 2.0,              // 粒子半径
+    radius: 0.0,              // 粒子半径
     lineColor: '120, 200, 255',   // 线条颜色 (R,G,B)
     particleColor: '180, 220, 255', // 粒子颜色
 
